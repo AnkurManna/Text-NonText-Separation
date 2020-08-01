@@ -1,0 +1,48 @@
+function histogram = hist_LTP(img,th)
+%img=[1 2 3;4 5 6;7 8 9];
+h = size(img,1);
+l = size(img,2);
+trans_img = zeros(h+2,l+2);
+trans_img(2:h+1,2:l+1) = img;
+pos_val = zeros(1,l*h);
+neg_val = zeros(1,l*h);
+k = 1;
+pos_hist = zeros(1,36);
+neg_hist = zeros(1,36);
+histogram = zeros(1,72);
+
+elements=unique_vals();
+
+
+index=zeros(1,256);
+id=1;
+
+
+for i = 1:256
+    if elements(id)==i-1
+        index(i) = id;
+        
+        id = id + 1;
+    end
+end
+
+for i = 2:h+1
+    for j = 2:l+1
+        pos_code = LTPP_rotation_cal(trans_img(i-1:i+1,j-1:j+1),th);
+        neg_code = LTPN_rotation_cal(trans_img(i-1:i+1,j-1:j+1),th);
+        pos_val(1,k) = pos_code;
+        neg_val(1,k) =neg_code;
+        k = k + 1;
+        %id1 = elements.find(pos_code);
+       % id2 = elements.find(neg_code);
+        pos_hist( index( pos_code+1 ) ) = pos_hist( index( pos_code +1) ) + 1;
+        neg_hist( index( neg_code +1) ) = neg_hist( index( neg_code+1 ) ) + 1;
+        
+    end
+end
+
+histogram(1:36)=pos_hist;
+histogram(37:72)=neg_hist;
+
+
+        
